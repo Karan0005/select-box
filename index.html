@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Welcome</title>
+        <link rel="stylesheet" href="./Assets/selectize/dist/css/selectize.default.css">
+        <style>
+            body{
+                padding:50px;
+            }
+            div#wrapper{
+                width:400px;
+            }
+            .selectize-input, .selectize-dropdown{
+                border-radius:0px !important;
+                font-size:14px !important;
+                font-family: sans-serif;
+            }
+            .option-image {
+                width:40px;
+                height:40px; 
+                float:left;
+            }
+            .option-text {
+                padding-left:5px;
+                line-height: 40px;
+                display:inline-block;
+            }
+            .selectize-dropdown{
+                padding:0.3px 0.1px !important;
+            }
+            .caption{
+                color:#B9B9B9;
+            }
+            .label, .caption{
+                font-family: sans-serif;
+                margin:2px;
+            }
+            .country-text{
+                padding:3px;
+            }
+        </style>
+    </head>
+    <i></i><body>
+    <div id="wrapper">
+        <select id="select-image-sample">
+            <option value=""></option>
+        </select>
+        <br> <br>
+        <select id="select-basic-sample">
+            <option value=""></option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Transgender">Transgender</option>
+        </select>
+        <br><br>
+        <select id="select-long-sample">
+            <option value=""></option>
+        </select>
+        <br><br>
+        <select id="select-detail-sample">
+
+        </select>
+    </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./Assets/selectize/dist/js/standalone/selectize.min.js"></script>
+    <script src="./Assets/selectize/dist/js/selectize.min.js"></script>
+    <script>
+        $("#select-image-sample").selectize({
+            persist: false,
+            maxItems: 5,
+            placeholder:"Select Receiver",
+            valueField: 'email',
+            labelField: 'name',
+            searchField: ['name', 'email'],
+            options: [
+                {name: 'Karan Gupta', email: 'karangupta0005@gmail.com', image:'./Assets/Images/Karan%20Gupta.jpg'},
+                {name: 'Kriti Seth', email: 'kritiseth0005@hotmail.com', image:'./Assets/Images/Kriti%20Seth.jpeg'},
+                {name: 'Rishabh Sharma', email: 'rishabhsharma0012@gmail.com', image:'./Assets/Images/Rishabh%20Sharma.jpg'},
+                {name: 'Shubham Gupta', email: 'shubhamgupta0009@gmail.com', image:'./Assets/Images/Shubham%20Gupta.jpg'},
+                {name: 'Mansi Bhutani',email: 'mansibhutani1213@hotmail.com', image:'./Assets/Images/Mansi%20Bhutani.jpg'},
+                {name: 'Tanya Mittal', email: 'tanyamittal0003@gmail.com', image:'./Assets/Images/Tanya%20Mittal.jpg'},
+                {name: 'Shahid Aggarwal',email: 'shahidaggarwal1113@hotmail.com', image:'./Assets/Images/Shahid%20Aggarwal.jpg'},
+                {name: 'Aditya Sharma', email: 'adityasharma0093@gmail.com', image:'./Assets/Images/Aditya%20Sharma.jpg'},
+                {name: 'Shilpa Harjai', email: 'shilpaharjai0673@gmail.com', image:'./Assets/Images/Shilpa%20Harjai.jpg'}
+            ],    
+            render: {
+                item: function(item, escape) {
+                    return '<div>' + (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') + '</div>';
+                },
+                option: function(item, escape) {
+                    return '<div style="padding:5px;">' + 
+                        '<span>' + '<img src="'+item.image+'" class="option-image">' + '</span>' + '<span class="option-text">' + item.name + '</span>' + '</div>';
+                }
+            },
+            onChange : function(data){
+                console.log(data);
+                $("#select-image-sample-selectized").blur();
+            },
+            sortField: [
+                {
+                    field: 'name',
+                    direction: 'asc'
+                }
+            ]
+        });
+        $("#select-basic-sample").selectize({
+            placeholder:"Select Gender",            
+            onChange : function(data){
+                if(data != ""){
+                    console.log(data);    
+                }
+            }
+        });
+        $("#select-long-sample").selectize({
+            placeholder:"Select Country",
+            valueField : "name",
+            searchField : "name",
+            labelField: "name",
+            options : [],
+            onInitialize : function(){
+                $.ajax({
+                    url: "http://"+window.location.host+"/country.json",
+                    type : "GET",
+                    dataType: 'json',
+                    success: function(data){
+                        var control = $("#select-long-sample").selectize()[0].selectize;
+                        for(var i=0; i<data.length; i++){
+                            control.addOption({name : data[i].name});
+                        }
+                    },
+                    error: function(){
+                        console.log("Error")
+                    }
+                });
+            },
+            onChange : function(data){
+                if(data != ""){
+                    console.log(data);    
+                }
+            }
+        });
+        $("#select-detail-sample").selectize({
+            persist: false,
+            maxItems: 5,
+            placeholder:"Select Receiver",
+            valueField: 'email',
+            labelField: 'name',
+            searchField: ['name', 'email'],
+            options: [
+                {name: 'Karan Gupta', email: 'karangupta0005@gmail.com'},
+                {name: 'Kriti Seth', email: 'kritiseth0005@hotmail.com'},
+                {name: 'Rishabh Sharma', email: 'rishabhsharma0012@gmail.com'},
+                {name: 'Shubham Gupta', email: 'shubhamgupta0009@gmail.com'},
+                {name: 'Mansi Bhutani',email: 'mansibhutani1213@hotmail.com'},
+                {name: 'Tanya Mittal', email: 'tanyamittal0003@gmail.com'},
+                {name: 'Shahid Aggarwal',email: 'shahidaggarwal1113@hotmail.com'},
+                {name: 'Aditya Sharma', email: 'adityasharma0093@gmail.com'},
+                {name: 'Shilpa Harjai', email: 'shilpaharjai0673@gmail.com'}
+            ],    
+            render: {
+                item: function(item, escape) {
+                    return '<div>' + (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') + '</div>';
+                },
+                option: function(item, escape) {
+                    return '<div style="padding:5px;">' + '<div class="label">' + item.name + '</div>' + '<span class="caption">' + item.email + '</span>' + '</div>';
+                }
+            },
+            onChange : function(data){
+                if(data.length != 0){
+                    console.log(data);  
+                    $("#select-detail-sample-selectized").blur();
+                }
+            }
+        });
+        $("#select-basic-sample-selectized").parent().on("click", function(){
+            var control = $("#select-basic-sample").selectize()[0].selectize;
+            control.clear();
+        })
+        $("#select-long-sample-selectized").parent().on("click", function(){
+            var control = $("#select-long-sample").selectize()[0].selectize;
+            control.clear();
+        })
+        $("#select-long-sample-selectized").parent().hover(function(){
+            $(this).css("cursor", "text");
+            $("#select-long-sample-selectized").css("cursor", "text");
+        })
+        $("#select-basic-sample-selectized").prop("disabled", "disabled");
+    </script>
+</html>
